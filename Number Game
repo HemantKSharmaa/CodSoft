@@ -1,0 +1,58 @@
+import java.util.Scanner;
+
+public class NumberGame {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int min = 1;
+        int max = 10;
+
+        int AttemptsPerRound = 10;
+        int TotalRounds = 0;
+        int TotalAttempts = 0;
+        boolean Playagain = true;
+
+
+        do {
+            int score = playRound(sc, min, max, AttemptsPerRound);
+            TotalRounds++;
+            TotalAttempts += AttemptsPerRound - score; // Update attempts based on score
+            System.out.print("Do you want to play again? (yes/no): ");
+            Playagain = sc.next().equalsIgnoreCase("yes");
+        } while (Playagain);
+
+        System.out.println("Thanks for playing!");
+        System.out.println("Total rounds played: " + TotalRounds);
+        System.out.println("Total attempts: " + TotalAttempts);
+    }
+
+    public static int playRound(Scanner scanner, int min, int max, int attempts) {
+        int randomNumber = (int) (Math.random() * (max - min + 1)) + min;
+        int guessCount = 0;
+        int score = attempts; // Initial score based on total attempts
+
+        while (guessCount < attempts) {
+            System.out.println("Guess a number between " + min + " and " + max + ": ");
+            int guess = scanner.nextInt();
+            guessCount++;
+
+            if (guess == randomNumber) {
+                System.out.println("Congratulations! You guessed the number in " + guessCount + " attempts.");
+                score -= guessCount; // Reduce score based on used attempts
+                break;
+            } else if (guess < randomNumber) {
+                System.out.println("Too low. Try again.");
+            } else {
+                System.out.println("Too high. Try again.");
+
+            }
+        }
+
+        if (guessCount == attempts) {
+            System.out.println("Sorry, you ran out of attempts. The number was: " + randomNumber);
+            score = 0; // No score for using all attempts
+        }
+
+        return score;
+    }
+}
